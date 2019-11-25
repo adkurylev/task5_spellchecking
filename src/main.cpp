@@ -18,13 +18,13 @@ void checkSpelling(std::ifstream& in, Dictionary& dict);
 
 void checkAllPossibleCorrections(std::string& word, Dictionary& dict);
 
-void transposing(std::string& word, Dictionary& dict);
+std::set<std::string> transposing(std::string& word, Dictionary& dict);
 
-void removal(std::string& word, Dictionary& dict);
+std::set<std::string> removal(std::string& word, Dictionary& dict);
 
-void replacement(std::string& word, Dictionary& dict);
+std::set<std::string> replacement(std::string& word, Dictionary& dict);
 
-void inserting(std::string& word, Dictionary& dict);
+std::set<std::string> inserting(std::string& word, Dictionary& dict);
 
 // program arguments to run, example: main.exe ../../res/wordlist.txt ../../res/test.txt
 int main(int argc, char* argv[])
@@ -116,25 +116,43 @@ std::string stripPunct(const std::string& s)
 
 void checkAllPossibleCorrections(std::string& word, Dictionary& dict)
 {
-    transposing(word, dict);
-    removal(word, dict);
-    replacement(word, dict);
-    inserting(word, dict);
+    std::set<std::string> set;
+    std::set<std::string> tempSet;
+
+    tempSet = transposing(word, dict);
+    set.insert(tempSet.begin(), tempSet.end());
+
+    tempSet = removal(word, dict);
+    set.insert(tempSet.begin(), tempSet.end());
+
+    tempSet = replacement(word, dict);
+    set.insert(tempSet.begin(), tempSet.end());
+
+    tempSet = inserting(word, dict);
+    set.insert(tempSet.begin(), tempSet.end());
+
+    for (const auto & it : set)
+        std::cout << it << " ";
 }
 
-void transposing(std::string& word, Dictionary& dict)
+std::set<std::string> transposing(std::string& word, Dictionary& dict)
 {
+    std::set<std::string> set;
+
     for (int i = 0; i < word.length() - 1; std::swap(word[i], word[i + 1]), ++i)
     {
         std::swap(word[i], word[i + 1]);
 
         if (dict.search(word))
-            std::cout << word << " ";
+            set.insert(word);
     }
+
+    return set;
 }
 
-void removal(std::string& word, Dictionary& dict)
+std::set<std::string> removal(std::string& word, Dictionary& dict)
 {
+    std::set<std::string> set;
     std::string temp = word;
 
     for (int i = 0; i < word.length(); ++i, word = temp)
@@ -142,12 +160,15 @@ void removal(std::string& word, Dictionary& dict)
         word.erase(i, 1);
 
         if (dict.search(word))
-            std::cout << word << " ";
+            set.insert(word);
     }
+
+    return set;
 }
 
-void replacement(std::string& word, Dictionary& dict)
+std::set<std::string> replacement(std::string& word, Dictionary& dict)
 {
+    std::set<std::string> set;
     char tempCh;
 
     for (int i = 0; i <= word.length(); ++i)
@@ -158,13 +179,16 @@ void replacement(std::string& word, Dictionary& dict)
             word[i] = ch;
 
             if (dict.search(word))
-                std::cout << word << " ";
+                set.insert(word);
         }
     }
+
+    return set;
 }
 
-void inserting(std::string& word, Dictionary& dict)
+std::set<std::string> inserting(std::string& word, Dictionary& dict)
 {
+    std::set<std::string> set;
     std::string temp = word;
 
     for (int i = 0; i <= word.length(); ++i)
@@ -174,7 +198,9 @@ void inserting(std::string& word, Dictionary& dict)
             word.insert(i, 1, ch);
 
             if (dict.search(word))
-                std::cout << word << " ";
+                set.insert(word);
         }
     }
+
+    return set;
 }
