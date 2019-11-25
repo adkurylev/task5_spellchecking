@@ -17,9 +17,13 @@ std::string stripPunct(const std::string& s);
 void checkSpelling(std::ifstream& in, Dictionary& dict);
 
 void checkAllPossibleCorrections(std::string& word, Dictionary& dict);
+
 void transposing(std::string& word, Dictionary& dict);
+
 void removal(std::string& word, Dictionary& dict);
+
 void replacement(std::string& word, Dictionary& dict);
+
 void inserting(std::string& word, Dictionary& dict);
 
 // program arguments to run, example: main.exe ../../res/wordlist.txt ../../res/test.txt
@@ -73,7 +77,7 @@ void checkSpelling(std::ifstream& in, Dictionary& dict)
             word = stripPunct(word);
             lower(word);
 
-            if(dict.search(word))
+            if (dict.search(word))
                 continue;
 
             std::cout << "\n\nYou have a misspelling in line " << line_number
@@ -120,9 +124,9 @@ void checkAllPossibleCorrections(std::string& word, Dictionary& dict)
 
 void transposing(std::string& word, Dictionary& dict)
 {
-    for (int i = 0; i < word.length() - 1; std::swap(word[i], word[i+1]), ++i)
+    for (int i = 0; i < word.length() - 1; std::swap(word[i], word[i + 1]), ++i)
     {
-        std::swap(word[i], word[i+1]);
+        std::swap(word[i], word[i + 1]);
 
         if (dict.search(word))
             std::cout << word << " ";
@@ -135,7 +139,7 @@ void removal(std::string& word, Dictionary& dict)
 
     for (int i = 0; i < word.length(); ++i, word = temp)
     {
-        word.erase(i);
+        word.erase(i, 1);
 
         if (dict.search(word))
             std::cout << word << " ";

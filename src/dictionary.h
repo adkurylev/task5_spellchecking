@@ -17,12 +17,11 @@ class hash_function
 public:
     unsigned int operator()(const std::string& s) const
     {
-        //TODO: Complete definition
         int res = 0;
 
         for (int i = 0; i < s.length(); ++i)
         {
-            res += (int)s[i]*pow(3,i);
+            res += (int) s[i] * pow(3, i);
         }
 
         return res;
