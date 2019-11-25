@@ -131,7 +131,8 @@ void checkAllPossibleCorrections(std::string& word, Dictionary& dict)
     tempSet = inserting(word, dict);
     set.insert(tempSet.begin(), tempSet.end());
 
-    for (const auto & it : set)
+    // generated automatically by CLion, I didn't copy this
+    for (const auto& it : set)
         std::cout << it << " ";
 }
 
