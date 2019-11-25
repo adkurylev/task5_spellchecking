@@ -7,6 +7,7 @@
 #include  <algorithm>
 #include  <string>
 #include  <stdlib.h>
+#include  <math.h>
 
 #include  "hashset.h"
 #include  "hashset.cpp"
@@ -17,6 +18,14 @@ public:
     unsigned int operator()(const std::string& s) const
     {
         //TODO: Complete definition
+        int res = 0;
+
+        for (int i = 0; i < s.length(); ++i)
+        {
+            res += (int)s[i]*pow(3,i);
+        }
+
+        return res;
     }
 };
 
@@ -34,10 +43,8 @@ public:
 
 class Dictionary : public HashSet<std::string, hash_function, equality>
 {
-    //TODO: Complete definition
 public:
     Dictionary(std::string filename);
-
 };
 
 #endif // _DICTIONARY_H_

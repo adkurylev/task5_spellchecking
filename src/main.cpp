@@ -16,6 +16,11 @@ std::string stripPunct(const std::string& s);
 
 void checkSpelling(std::ifstream& in, Dictionary& dict);
 
+void checkAllPossibleCorrections(std::string& word, Dictionary& dict);
+void transposing(std::string& word, Dictionary& dict);
+void removal(std::string& word, Dictionary& dict);
+void replacement(std::string& word, Dictionary& dict);
+void inserting(std::string& word, Dictionary& dict);
 
 // program arguments to run, example: main.exe ../../res/wordlist.txt ../../res/test.txt
 int main(int argc, char* argv[])
@@ -65,7 +70,18 @@ void checkSpelling(std::ifstream& in, Dictionary& dict)
         std::string word;
         while (ss >> word)
         {
-            // TODO: Complete the spell check of each word
+            word = stripPunct(word);
+            lower(word);
+
+            if(dict.search(word))
+                continue;
+
+            std::cout << "\n\nYou have a misspelling in line " << line_number
+                      << " in word: " << word << std::endl;
+
+            std::cout << "Possible corrections: ";
+
+            checkAllPossibleCorrections(word, dict);
         }
     }
 }
@@ -91,5 +107,70 @@ std::string stripPunct(const std::string& s)
     } else
     {
         return s;
+    }
+}
+
+void checkAllPossibleCorrections(std::string& word, Dictionary& dict)
+{
+    transposing(word, dict);
+    removal(word, dict);
+    replacement(word, dict);
+    inserting(word, dict);
+}
+
+void transposing(std::string& word, Dictionary& dict)
+{
+    for (int i = 0; i < word.length() - 1; std::swap(word[i], word[i+1]), ++i)
+    {
+        std::swap(word[i], word[i+1]);
+
+        if (dict.search(word))
+            std::cout << word << " ";
+    }
+}
+
+void removal(std::string& word, Dictionary& dict)
+{
+    std::string temp = word;
+
+    for (int i = 0; i < word.length(); ++i, word = temp)
+    {
+        word.erase(i);
+
+        if (dict.search(word))
+            std::cout << word << " ";
+    }
+}
+
+void replacement(std::string& word, Dictionary& dict)
+{
+    char tempCh;
+
+    for (int i = 0; i <= word.length(); ++i)
+    {
+        for (char ch = 'a'; ch <= 'z'; ++ch, word[i] = tempCh)
+        {
+            tempCh = word[i];
+            word[i] = ch;
+
+            if (dict.search(word))
+                std::cout << word << " ";
+        }
+    }
+}
+
+void inserting(std::string& word, Dictionary& dict)
+{
+    std::string temp = word;
+
+    for (int i = 0; i <= word.length(); ++i)
+    {
+        for (char ch = 'a'; ch <= 'z'; ++ch, word = temp)
+        {
+            word.insert(i, 1, ch);
+
+            if (dict.search(word))
+                std::cout << word << " ";
+        }
     }
 }
